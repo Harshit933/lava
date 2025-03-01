@@ -1,0 +1,155 @@
+[harshit:../Desktop/lava-challenge/lava (master|…12)] docker-compose down       
+docker-compose build
+docker-compose up
+Removing lava_app_1 ... done
+Removing network lava_default
+Building app
+[+] Building 35.6s (21/21) FINISHED                                                                                         docker:desktop-linux
+=> [internal] load build definition from Dockerfile                                                                                        0.0s
+=> => transferring dockerfile: 1.39kB                                                                                                      0.0s
+=> WARN: FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 1)                                                              0.0s
+=> [internal] load metadata for docker.io/library/debian:bookworm-slim                                                                     2.1s
+=> [internal] load metadata for docker.io/library/rust:latest                                                                              2.1s
+=> [internal] load .dockerignore                                                                                                           0.0s
+=> => transferring context: 2B                                                                                                             0.0s
+=> [internal] load build context                                                                                                           0.0s
+=> => transferring context: 171B                                                                                                           0.0s
+=> [builder 1/9] FROM docker.io/library/rust:latest@sha256:caa4a0e7bd1fe2e648caf3d904bc54c3bfcae9e74b4df2eb9ebe558c9e9e88c5                0.0s
+=> => resolve docker.io/library/rust:latest@sha256:caa4a0e7bd1fe2e648caf3d904bc54c3bfcae9e74b4df2eb9ebe558c9e9e88c5                        0.0s
+=> CACHED [stage-1 1/6] FROM docker.io/library/debian:bookworm-slim@sha256:12c396bd585df7ec21d5679bb6a83d4878bc4415ce926c9e5ea6426d23c60b  0.0s
+=> => resolve docker.io/library/debian:bookworm-slim@sha256:12c396bd585df7ec21d5679bb6a83d4878bc4415ce926c9e5ea6426d23c60bdc               0.0s
+=> [stage-1 2/6] RUN apt-get update && apt-get install -y     openssl     ca-certificates     curl     libpq5     && rm -rf /var/lib/apt  13.7s
+=> CACHED [builder 2/9] WORKDIR /usr/src/app                                                                                               0.0s
+=> CACHED [builder 3/9] RUN apt-get update && apt-get install -y     build-essential     pkg-config     openssl     libssl-dev     && rm   0.0s
+=> CACHED [builder 4/9] COPY Cargo.toml Cargo.lock ./                                                                                      0.0s
+=> CACHED [builder 5/9] RUN mkdir -p src &&     echo "fn main() {}" > src/main.rs &&     echo "pub mod error { pub enum LavaErrors {} }"   0.0s
+=> CACHED [builder 6/9] RUN cargo build --release                                                                                          0.0s
+=> CACHED [builder 7/9] RUN rm -rf src                                                                                                     0.0s
+=> CACHED [builder 8/9] COPY src ./src                                                                                                     0.0s
+=> CACHED [builder 9/9] RUN touch src/main.rs src/error.rs && cargo build --release                                                        0.0s
+=> [stage-1 3/6] WORKDIR /app                                                                                                              0.0s
+=> [stage-1 4/6] COPY --from=builder /usr/src/app/target/release/lava /app/app                                                             0.0s
+=> [stage-1 5/6] RUN curl -o loans-borrower-cli https://loans-borrower-cli.s3.amazonaws.com/loans-borrower-cli-linux &&     chmod +x loa  18.2s  
+=> [stage-1 6/6] COPY .env .                                                                                                               0.0s  
+=> exporting to image                                                                                                                      1.3s  
+=> => exporting layers                                                                                                                     1.0s  
+=> => exporting manifest sha256:f2db5029d10c97bf3c171fd37792911bbae91e627f55ce1990daa1ba9499a58e                                           0.0s
+=> => exporting config sha256:fd0d8d7bdab451c76029ca0963620f9ce909c55e34e6ad97f1e049adbf5f49b0                                             0.0s
+=> => exporting attestation manifest sha256:81d7c121bd6f700286c8aa586cf73c7fc5370f83b12e7884f8576571f63eccf9                               0.0s
+=> => exporting manifest list sha256:65767ec2b27ef08a5cecbb432170df189a5f24f7b3b718cfbe6679b6287184b0                                      0.0s
+=> => naming to docker.io/library/lava_app:latest                                                                                          0.0s
+=> => unpacking to docker.io/library/lava_app:latest                                                                                       0.2s
+
+1 warning found (use docker --debug to expand):
+- FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 1)
+Creating network "lava_default" with the default driver
+Creating lava_app_1 ... done
+Attaching to lava_app_1
+app_1  | Listening on port: 3000
+app_1  | Mnemonic: unable escape sausage forward paper squeeze knee image episode imitate taste enable
+app_1  | Public key: 03b9337558bbaafce153c02116d1ef219457bfc179ff915b078862fa86263b4c79
+app_1  | Bitcoin Address: tb1q7dxzpegglfmneclc365vcn703s8n23tj96sa54
+app_1  | Solana Address: HHnCPGZ65yNNJUt8H2QLjf4LqhgNs4J1cVRyN61TcZ7T
+app_1  | Response from UPDATE BTC BALANCE: "{\"txid\":\"d168141810758c9cf31b2f702a20e7cc5511e513bb0617d4daaff176510b0d61\"}"
+app_1  | Response from UPDATE SOL BALANCE: "{\"signature\":\"2bXVsGVnxDZT17DkuJMYq2uesVNxEpwVgekdRaRWNHkyb1ouBSN2wkerqLPG9MEqKtb1nMqhSSxCoLUhe8CS
+oPvA\"}"
+app_1  | Waiting for 20 seconds...
+app_1  | CLI DIR: /app/./loans-borrower-cli
+app_1  | CLI DIR: "/app/./loans-borrower-cli"
+app_1  | ARG: "MNEMONIC=\"unable escape sausage forward paper squeeze knee image episode imitate taste enable\" /app/./loans-borrower-cli --testn
+et --disable-backup-contracts borrow init --loan-capital-asset solana-lava-usd --ltv-ratio-bp 5000 --loan-duration-days 4 --loan-amount 2 --final
+ize"
+app_1  | Output: Output { status: ExitStatus(unix_wait_status(0)), stdout: "info: Database directory: /root/.lava-borrower-cli/a1704568b9fe4e2eae
+0f7ead38651ee2bd7dc4b8311007859973afd8fcca9649/testnet\ninfo: Your Bitcoin address: tb1q7dxzpegglfmneclc365vcn703s8n23tj96sa54\ninfo: Syncing you
+r wallet...\ninfo: Wallet balance: 100 000 sats\ninfo: Your loan capital address: HHnCPGZ65yNNJUt8H2QLjf4LqhgNs4J1cVRyN61TcZ7T\ninfo: BTC price:
+$85,424.00\ninfo: Collateral amount: 4 682 sats\ninfo: $2.00 (solana-lava-usd) received: wSLJcnt9C2wtVZbAtENmMUcY9bXanpFMDWZCnPGiND3AXjJf47QhVdN7
+LYXMpg42zhVksEBa1kjztxGEqL3ZzVf\n", stderr: " INFO  loans_borrower_cli > Database directory: /root/.lava-borrower-cli/a1704568b9fe4e2eae0f7ead386
+51ee2bd7dc4b8311007859973afd8fcca9649/testnet\n INFO  lava_wallet::wallet > Getting contract list from https://loans-contracts-backup.testnet.lav
+a.xyz\n INFO  lava_wallet::wallet > Contract backup disabled\n INFO  loans_borrower_cli::borrower::init > Your Bitcoin address: tb1q7dxzpegglfmne
+clc365vcn703s8n23tj96sa54\n INFO  loans_borrower_cli::borrower::init > Syncing your wallet...\n INFO  loans_borrower_cli::borrower::init > Wallet
+balance: 100 000 sats\n INFO  loans_borrower_cli::borrower::init > Your loan capital address: HHnCPGZ65yNNJUt8H2QLjf4LqhgNs4J1cVRyN61TcZ7T\n INF
+O  sibyls::oracle::pricefeeds::bitfinex > sending bitfinex http request BTCUSD 2025-03-01 19:30:17.033174661 +00:00:00\n INFO  sibyls::oracle::pr
+icefeeds::bitfinex > bitfinex price: 85617\n INFO  sibyls::oracle::pricefeeds::kraken   > sending kraken http request BTCUSD 2025-03-01 19:30:17.
+033174661 +00:00:00\n INFO  sibyls::oracle::pricefeeds::kraken   > kraken price 85240\n INFO  sibyls::oracle::pricefeeds::bitstamp > sending bits
+tamp http request BTCUSD 2025-03-01 19:30:17.033174661 +00:00:00\n ERROR sibyls::oracle::pricefeeds           > cannot retrieve price http error:
+error decoding response body: expected value at line 1 column 1\n INFO  sibyls::oracle::pricefeeds           > median price of BTCUSD is 85428.5
+(avg of 85240 and 85617)\n INFO  sibyls::oracle::pricefeeds::bitfinex > sending bitfinex http request BTCUSD 2025-03-01 19:30:20.056898204 +00:0
+0:00\n INFO  sibyls::oracle::pricefeeds::bitfinex > bitfinex price: 85608\n INFO  sibyls::oracle::pricefeeds::kraken   > sending kraken http requ
+est BTCUSD 2025-03-01 19:30:20.056898204 +00:00:00\n INFO  sibyls::oracle::pricefeeds::kraken   > kraken price 85240\n INFO  sibyls::oracle::pric
+efeeds::bitstamp > sending bitstamp http request BTCUSD 2025-03-01 19:30:20.056898204 +00:00:00\n ERROR sibyls::oracle::pricefeeds           > ca
+nnot retrieve price http error: error decoding response body: expected value at line 1 column 1\n INFO  sibyls::oracle::pricefeeds           > me
+dian price of BTCUSD is 85424 (avg of 85240 and 85608)\n INFO  loans_borrower_cli::borrower::init   > BTC price: $85,424.00\n INFO  loans_borrowe
+r_cli::borrower::init   > Collateral amount: 4 682 sats\n INFO  borrower_manager::borrower_manager   > Preparing to send 5 900 sats to tb1qm0eqva
+tn09dh3xvrs5m5ynkr5ufvlhdx0rjv3d62dw5eza0a6chqj0xtrw\n INFO  loans_oracle::oracles::lava          > fetching events from 2025-03-02 to 2025-03-05
+\n INFO  loans_handler::borrower::prepare_creation > New contract ID: 40b2461785b473415ea8d95d93a2dcd2450d4316867bfc1d2a0997fd2f310082\n INFO  bo
+rrower_manager::borrower_manager        > Broadcasting a bitcoin transaction 654bada426fe5e5d74de19cf8ad60159b66bbdbe4214d49b19d37cb6b7e95e23\n I
+NFO  lava_blockchain::bitcoin                  > Broadcasting a bitcoin transaction \"654bada426fe5e5d74de19cf8ad60159b66bbdbe4214d49b19d37cb6b7e
+95e23\": \"01000000000101610d0b5176f1afdad41706bb13e51155cce7202a702f1bf39c8c7510181468d10000000000fdffffff020c17000000000000220020dbf2067573795b
+7899838537424ec3a712cfdda678e4c8b74a6ba99175fdd62e4d6e0100000000001600149725cba9d792af2095576e09c9c9c1c3a2c2afcb024730440220420b5e9474f51f17f483a
+db53899569c6d839ad528eb171b9c7a959639956bed0220124c5e5b9973bec98f6e25f71e72e449e4d7c37d014290a68fb7ba0466b61ab8012103b9337558bbaafce153c02116d1ef
+219457bfc179ff915b078862fa86263b4c7986fa1c00\".\n INFO  loans_handler::borrower::accept_contract  > The lender has accepted the loan. Accepting t
+he solana-lava-usd...\n INFO  loans_borrower_cli::borrower::init        > $2.00 (solana-lava-usd) received: wSLJcnt9C2wtVZbAtENmMUcY9bXanpFMDWZCn
+PGiND3AXjJf47QhVdN7LYXMpg42zhVksEBa1kjztxGEqL3ZzVf\n" }
+app_1  | Extracted Contract ID: 40b2461785b473415ea8d95d93a2dcd2450d4316867bfc1d2a0997fd2f310082
+app_1  | Waiting for 10 seconds...
+app_1  | Repay Output: Output { status: ExitStatus(unix_wait_status(0)), stdout: "info: Database directory: /root/.lava-borrower-cli/a1704568b9fe
+4e2eae0f7ead38651ee2bd7dc4b8311007859973afd8fcca9649/testnet\n", stderr: " INFO  loans_borrower_cli > Database directory: /root/.lava-borrower-cl
+i/a1704568b9fe4e2eae0f7ead38651ee2bd7dc4b8311007859973afd8fcca9649/testnet\n INFO  lava_wallet::wallet > Getting contract list from https://loans
+-contracts-backup.testnet.lava.xyz\n INFO  lava_wallet::wallet > Contract backup disabled\n INFO  borrower_manager::borrower_manager > Collateral
+can be reclaimed in 1d 23h 58m 19s\n INFO  borrower_manager::borrower_manager > Waiting for the repayment transaction to finalize...\n INFO  bor
+rower_manager::borrower_manager > The repayment transaction has been finalized.\n INFO  borrower_manager::borrower_manager > Waiting for the lend
+er to accept the loan repayment. This could take a while...\n INFO  lava_blockchain::bitcoin           > Broadcasting a bitcoin transaction \"1c8
+d5b3259c8d73f09e526906ae126864bfde49cd1df1ae2bcab72de067028c1\": \"02000000000101c16f6d0306697424fab9afee6a056e7bdf6beac7179db55f4c099ce94551de28
+0000000000ffffffff011b140000000000001600146a260c77940aea408c55d1600a5ddbd32a8074710440ab7696a693b2755413945541d0662c66b8c099807fbc129599102e60128
+f0e26d8166c7168619afc0b8299fc0badd477f5dd2f8e1b0c392ffa0c3f05bf0b5387010147304402201b94e9ff6e1290706ad9d05dcadf422adf8df183caf51bf2bfb97faff24d65
+0f02203ab3461dcbb42c6fbb9aba220ea760b5dda7b82c687697faecbe4e2369367baa017021034529b3cc4c02edc64639e31fbdd59d4641bbdb48c2f86f16e22e5bffb7561a05ad6
+382014088a8205f810e47b63123f363bec5c37c7d8638a67054db81c521a6fa578fbd59850a1f876721030cc53f1dcb457ec3fefa5720943c0fbbdc40abbe37fa8ec469f549adc867
+6599ac6800000000\".\n INFO  borrower_manager::borrower_manager > Waiting for the collateral to be reclaimed with txid 1c8d5b3259c8d73f09e526906ae
+126864bfde49cd1df1ae2bcab72de067028c1\n INFO  borrower_manager::borrower_manager > The collateral has been reclaimed!\n" }
+app_1  | Waiting for 10 seconds...
+app_1  | Loan Repay Output: Output { status: ExitStatus(unix_wait_status(0)), stdout: "info: Database directory: /root/.lava-borrower-cli/a170456
+8b9fe4e2eae0f7ead38651ee2bd7dc4b8311007859973afd8fcca9649/testnet\nContract details have been written to 40b2461785b473415ea8d95d93a2dcd2450d4316
+867bfc1d2a0997fd2f310082.json\n", stderr: " INFO  loans_borrower_cli > Database directory: /root/.lava-borrower-cli/a1704568b9fe4e2eae0f7ead38651
+ee2bd7dc4b8311007859973afd8fcca9649/testnet\n INFO  lava_wallet::wallet > Getting contract list from https://loans-contracts-backup.testnet.lava.
+xyz\n INFO  lava_wallet::wallet > Contract backup disabled\n INFO  borrower_manager::borrower_manager > Has 0 confirmations, waiting for 1\n" }
+app_1  | Key 'outcome.repayment.collateral_repayment_txid' exists!
+app_1  | {"Closing":{"collateral_return_tx":{"input":[{"previous_output":"28de5145e99c094c5fb59d17c7ea6bdf7b6e056aeeafb9fa24746906036d6fc1:0","sc
+ript_sig":"","sequence":4294967295,"witness":["ab7696a693b2755413945541d0662c66b8c099807fbc129599102e60128f0e26d8166c7168619afc0b8299fc0badd477f5
+dd2f8e1b0c392ffa0c3f05bf0b5387","01","304402201b94e9ff6e1290706ad9d05dcadf422adf8df183caf51bf2bfb97faff24d650f02203ab3461dcbb42c6fbb9aba220ea760b
+5dda7b82c687697faecbe4e2369367baa01","21034529b3cc4c02edc64639e31fbdd59d4641bbdb48c2f86f16e22e5bffb7561a05ad6382014088a8205f810e47b63123f363bec5c
+37c7d8638a67054db81c521a6fa578fbd59850a1f876721030cc53f1dcb457ec3fefa5720943c0fbbdc40abbe37fa8ec469f549adc8676599ac68"]}],"lock_time":0,"output":
+[{"script_pubkey":"00146a260c77940aea408c55d1600a5ddbd32a807471","value":5147}],"version":2},"earnings":null,"end_date":"2025-03-01","info":{"ini
+tialization_preimage":[136,179,79,226,220,2,174,19,0,164,86,166,79,236,57,160,145,232,157,176,83,14,152,214,172,58,42,40,86,201,100,97,96,238,46,
+186,20,1,52,90,78,34,159,5,182,116,214,148,114,180,206,185,34,245,12,139,92,189,23,111,112,218,210,117],"lender_rpc_server_endpoint":"https://loa
+ns-lender-rpc-6468f478-8011-702b-f4b9-6782840baa40.testnet.lava.xyz/","loan_capital_asset":"solana-lava-usd","oracle_configs":[{"pubkey":"93c017c
+25e7c9f9f58fe98b961b82bbcf23839eb4b280bdec1f9a5837abf4e34"}],"salt":0,"unsigned_contract":{"config":{"attested_price_bucket_size":100,"borrower_d
+etails":{"change_script_pubkey":"00146a260c77940aea408c55d1600a5ddbd32a807471","fund_pubkey":"034529b3cc4c02edc64639e31fbdd59d4641bbdb48c2f86f16e
+22e5bffb7561a05","loan_capital_address":"HHnCPGZ65yNNJUt8H2QLjf4LqhgNs4J1cVRyN61TcZ7T","payout_script_pubkey":"00146a260c77940aea408c55d1600a5ddb
+d32a807471"},"escrow_fund_txid":"654bada426fe5e5d74de19cf8ad60159b66bbdbe4214d49b19d37cb6b7e95e23","escrow_fund_vout":0,"fee_rate_per_vb_pp":212,
+"initialization_hashvalue":"973f77589b9e1b9ec35a32505cd054d03257cc56c580be4a67034ab513abdb3c","lender_details":{"fund_pubkey":"030cc53f1dcb457ec3
+fefa5720943c0fbbdc40abbe37fa8ec469f549adc8676599","loan_capital_address":"4wyegYQCtTXeDUFucmuFHabkjRB1nhRJJ85huNMt7LUb","payout_script_pubkey":"0
+0140c34806ef406fb8ce19a8fa0545ffc44e904dc0d"},"liquidation_ltv_bp":9300,"loan_details":{"collateral_amt_sat":4682,"escrow_timelock_days":2,"inter
+est_rate_bp":1500,"loan_borrower_refund_days":14,"loan_capital_amt":{"amount":2000000,"asset":"solana-lava-usd"},"loan_expiry_days":4,"loan_lende
+r_refund_days":7,"start_date_time":"2025-03-01 19:30:21.0 +00:00:00"},"network":"signet","oracle_error_tolerance":[2,4],"oracle_threshold":1,"pro
+tocol_fee_options":{"interest_fee_address":"tb1qlq2qssxkau486cl8f85upk8uxkjee6xrjh7kpx","loan_capital_address":"CCusg1by2S33eufqzEEetMA9YquACxx4f
+51sizWRJN7g"},"repayment_hashvalue":"5f810e47b63123f363bec5c37c7d8638a67054db81c521a6fa578fbd59850a1f"},"contract_funding_tx":{"input":[{"previou
+s_output":"654bada426fe5e5d74de19cf8ad60159b66bbdbe4214d49b19d37cb6b7e95e23:0","script_sig":"","sequence":1,"witness":[]}],"lock_time":0,"output"
+:[{"script_pubkey":"002037b839705689ddf139a1a5e6c3470649fc1014c22eaeadaa6fe3bc9886784d63","value":5522}],"version":2},"contract_redeemscript":"21
+034529b3cc4c02edc64639e31fbdd59d4641bbdb48c2f86f16e22e5bffb7561a05ad6382014088a8205f810e47b63123f363bec5c37c7d8638a67054db81c521a6fa578fbd59850a1
+f876721030cc53f1dcb457ec3fefa5720943c0fbbdc40abbe37fa8ec469f549adc8676599ac68","escrow_redeemscript":"21034529b3cc4c02edc64639e31fbdd59d4641bbdb4
+8c2f86f16e22e5bffb7561a0574528763ad03510140b267abad82014088a820973f77589b9e1b9ec35a32505cd054d03257cc56c580be4a67034ab513abdb3c8821030cc53f1dcb45
+7ec3fefa5720943c0fbbdc40abbe37fa8ec469f549adc8676599ac68","escrow_timeout_tx":{"input":[{"previous_output":"654bada426fe5e5d74de19cf8ad60159b66bb
+dbe4214d49b19d37cb6b7e95e23:0","script_sig":"","sequence":4194641,"witness":[]}],"lock_time":0,"output":[{"script_pubkey":"00146a260c77940aea408c
+55d1600a5ddbd32a807471","value":5621}],"version":2},"fees":{"contract_fund":378,"escrow_timeout":279,"expiration":840,"liquidation":379,"refund":
+313,"repayment":375},"refund_borrower_cet":{"input":[{"previous_output":"28de5145e99c094c5fb59d17c7ea6bdf7b6e056aeeafb9fa24746906036d6fc1:0","scr
+ipt_sig":"","sequence":4294967294,"witness":[]}],"lock_time":1742412621,"output":[{"script_pubkey":"00146a260c77940aea408c55d1600a5ddbd32a807471"
+,"value":5209}],"version":2},"refund_lender_cet":{"input":[{"previous_output":"28de5145e99c094c5fb59d17c7ea6bdf7b6e056aeeafb9fa24746906036d6fc1:0
+","script_sig":"","sequence":4294967294,"witness":[]}],"lock_time":1741807821,"output":[{"script_pubkey":"00140c34806ef406fb8ce19a8fa0545ffc44e90
+4dc0d","value":5209}],"version":2},"repayment_cet":{"input":[{"previous_output":"28de5145e99c094c5fb59d17c7ea6bdf7b6e056aeeafb9fa24746906036d6fc1
+:0","script_sig":"","sequence":4294967295,"witness":[]}],"lock_time":0,"output":[{"script_pubkey":"00146a260c77940aea408c55d1600a5ddbd32a807471",
+"value":5147}],"version":2}},"version":12884901888},"loan_capital_contract_funding_txid":{"Solana":"3KF1Z7JtqjLRNEAQmZ46jv8AYcPQin3a9zQbPYLCMdQad
+PYJgLefgEZtxCkj3hiAUxpauJ4cZrTNH7dghiEv2VnG"},"loan_capital_earnings_asset":null,"loan_capital_loan_acceptance_txid":{"Solana":"wSLJcnt9C2wtVZbAt
+ENmMUcY9bXanpFMDWZCnPGiND3AXjJf47QhVdN7LYXMpg42zhVksEBa1kjztxGEqL3ZzVf"},"outcome":{"repayment":{"collateral_repayment_txid":"1c8d5b3259c8d73f09e
+526906ae126864bfde49cd1df1ae2bcab72de067028c1","loan_capital_repayment_acceptance_txid":{"Solana":"wSLJcnt9C2wtVZbAtENmMUcY9bXanpFMDWZCnPGiND3AXj
+Jf47QhVdN7LYXMpg42zhVksEBa1kjztxGEqL3ZzVf"},"loan_capital_repayment_txid":{"Solana":"3KF1Z7JtqjLRNEAQmZ46jv8AYcPQin3a9zQbPYLCMdQadPYJgLefgEZtxCkj
+3hiAUxpauJ4cZrTNH7dghiEv2VnG"}}}}}
