@@ -196,12 +196,11 @@ async fn test() {
         .and_then(|r| r.get("collateral_repayment_txid"))
         .is_some()
     {
-        println!("Key 'outcome.repayment.collateral_repayment_txid' exists!");
+        println!("Test was successful");
     } else {
-        println!("Key does not exist!");
+        println!("Test failed");
     }
 
-    println!("{}", json);
 }
 
 #[tokio::main]
