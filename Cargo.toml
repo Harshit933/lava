@@ -1,0 +1,17 @@
+[package]
+name = "lava"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bdk_wallet = { version = "1.1.0", features = ["keys-bip39", "rusqlite"] }
+solana-sdk = "2.2.1"
+ed25519-dalek = "1.0.1"
+ed25519-dalek-bip32 = "0.2.0"
+bip39 = "2.0.0"
+reqwest = "0.12.12"
+axum = "0.7"
+tokio = { version = "1", features = ["full"] }
+dirs = "6.0.0"
+regex = "1.11.1"
+dotenv = "0.15"
