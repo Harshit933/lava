@@ -7,6 +7,7 @@ pub enum LavaErrors {
     NoContractID,
     FailedToUpdateBtcBalance,
     FailedToUpdateSolBalance,
+    NoRepaymentIdFound
 }
 
 impl std::error::Error for LavaErrors {}
@@ -16,7 +17,8 @@ impl fmt::Display for LavaErrors {
         match self {
             LavaErrors::NoContractID => write!(f, "No contract ID found"),
             LavaErrors::FailedToUpdateBtcBalance => write!(f, "Failed to update BTC balance"),
-            LavaErrors::FailedToUpdateSolBalance => write!(f, "Failed to update Sol balance")
+            LavaErrors::FailedToUpdateSolBalance => write!(f, "Failed to update Sol balance"),
+            LavaErrors::NoRepaymentIdFound => write!(f, "No repayment ID found"),
         }
     }
 }
@@ -27,6 +29,7 @@ impl IntoResponse for LavaErrors {
             LavaErrors::NoContractID => "No contract ID found".into_response(),
             LavaErrors::FailedToUpdateBtcBalance => "Failed to update BTC balance".into_response(),
             LavaErrors::FailedToUpdateSolBalance => "Failed to update Sol balance".into_response(),
+            LavaErrors::NoRepaymentIdFound => "No repayment ID found".into_response(),
         }
     }
 }

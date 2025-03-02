@@ -197,6 +197,7 @@ async fn test() -> Result<impl IntoResponse, LavaErrors>{
         println!("Test was successful");
     } else {
         println!("Test failed");
+        return Err(LavaErrors::NoRepaymentIdFound);
     }
 
     Ok(Json("OK"))
