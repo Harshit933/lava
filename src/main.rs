@@ -5,8 +5,9 @@ use std::str::FromStr;
 use std::time::Duration;
 use std::{env, fs, thread};
 
+use axum::response::IntoResponse;
 use axum::routing::get;
-use axum::Router;
+use axum::{Json, Router};
 use bdk_wallet::bitcoin::bip32::{DerivationPath, Xpub};
 use bdk_wallet::bitcoin::key::Secp256k1;
 use bdk_wallet::bitcoin::{Address, CompressedPublicKey};
@@ -86,7 +87,7 @@ fn derive_solana_keypair(seed: &[u8], path: &str) -> Result<Keypair, LavaErrors>
     Ok(keypair)
 }
 
-async fn test() {
+async fn test() -> Result<impl IntoResponse, LavaErrors>{
     // Setup up environment variable
     dotenv().ok();
     let cli_path = env::var("CLI_PATH").expect("API_KEY not found in .env");
@@ -98,37 +99,33 @@ async fn test() {
         "m/84'/1'/0'/0/0",
     )
     .unwrap();
-    println!("Bitcoin Address: {}", bitcoin_address);
-    println!("Solana Address: {}", solana_address);
+
+    println!("Mnemonics generated successful");
 
     let client = reqwest::Client::new();
-    println!(
-        "Response from UPDATE BTC BALANCE: {:?}",
-        update_btc_balance(&client, bitcoin_address).await.unwrap()
-    );
-    println!(
-        "Response from UPDATE SOL BALANCE: {:?}",
-        update_sol_balance(&client, solana_address).await.unwrap()
-    );
+    let btc_response = update_btc_balance(&client, bitcoin_address).await.unwrap();
+    if !btc_response.contains("txid") {
+        return Err(LavaErrors::FailedToUpdateBtcBalance);
+    }
+
+    let sol_response = update_sol_balance(&client, solana_address).await.unwrap();
+    if !sol_response.contains("signature") {
+        return Err(LavaErrors::FailedToUpdateSolBalance);
+    }
+    println!("Updated balance successful");
 
     println!("Waiting for 20 seconds...");
 
     thread::sleep(Duration::from_secs(20));
 
     let cli_dir = format!("{}./loans-borrower-cli", cli_path);
-    println!("CLI DIR: {}", cli_dir);
 
     let arg = format!(
         r#"MNEMONIC="{}" {} --testnet --disable-backup-contracts borrow init --loan-capital-asset solana-lava-usd --ltv-ratio-bp 5000 --loan-duration-days 4 --loan-amount 2 --finalize"#,
         mnemonic, cli_dir
     );
 
-    println!("CLI DIR: {:?}", cli_dir);
-    println!("ARG: {:?}", arg);
-
     let output = Command::new("sh").arg("-c").arg(arg).output().unwrap();
-
-    println!("Output: {:?}", output);
 
     let formatted_output = format!("{:?}", output);
     let re = Regex::new(r"New contract ID: ([a-f0-9]{64})").unwrap();
@@ -136,10 +133,11 @@ async fn test() {
     if let Some(caps) = re.captures(&formatted_output) {
         if let Some(contract_id) = caps.get(1) {
             c_id = Some(contract_id.as_str());
-            println!("Extracted Contract ID: {}", contract_id.as_str());
+            println!("Successfully created a LOAN, Extracted Contract ID: {}", contract_id.as_str());
         }
     } else {
-        println!("No contract ID found in the log.");
+        println!("Test failed: Fail to extract Contract ID");
+        return Err(LavaErrors::NoContractID);
     }
 
     println!("Waiting for 10 seconds...");
@@ -153,13 +151,13 @@ async fn test() {
         c_id.unwrap()
     );
 
-    let output = Command::new("sh")
+    Command::new("sh")
         .arg("-c")
         .arg(repay_arg)
         .output()
         .unwrap();
 
-    println!("Repay Output: {:?}", output);
+    println!("Successfully Repayed the loan ");
 
     println!("Waiting for 10 seconds...");
     thread::sleep(Duration::from_secs(10));
@@ -173,13 +171,13 @@ async fn test() {
         c_id.unwrap(),
     );
 
-    let output = Command::new("sh")
+    Command::new("sh")
         .arg("-c")
         .arg(loan_repay_arg)
         .output()
         .unwrap();
 
-    println!("Loan Repay Output: {:?}", output);
+    println!("Successfully fetched the repay result");
 
     let file_name = format!("{}.json", c_id.unwrap());
     let contents = fs::read_to_string(file_name).expect("Failed to read file");
@@ -201,6 +199,7 @@ async fn test() {
         println!("Test failed");
     }
 
+    Ok(Json("OK"))
 }
 
 #[tokio::main]
