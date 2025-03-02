@@ -13,9 +13,6 @@
 2. `cargo r`
 3. Then in other terminal make the CURL request as: `curl http://0.0.0.0:3000/test`
 
-There are many things where the code can be cleaned
-2. For now all the functions are written without using any type of design pattern like the most common one would be to use the builder pattern for rust.
-
 **TODO:**
 
 I have yet to implement the function to store the contract-ids. But I guess it should be fairly easy to do.
